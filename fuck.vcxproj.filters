@@ -1,0 +1,393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{4db62ae0-c23a-44b9-bbb4-b299fad576cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\render">
+      <UniqueIdentifier>{1018c079-1f2e-4329-b2ee-065b2b32ac78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\sdk">
+      <UniqueIdentifier>{c805af4b-b941-4476-a455-444837a839d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\utilities">
+      <UniqueIdentifier>{4653f98a-3e83-4410-b60b-6ee0cbe0bbbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\vmt">
+      <UniqueIdentifier>{ee989256-b508-4bd2-a9b1-151c25a1b4e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\netvar_manager">
+      <UniqueIdentifier>{dae58dbd-5ea8-49ef-b2da-480ebfc8053d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\math">
+      <UniqueIdentifier>{43a75930-9c26-49e1-8916-194a4f074247}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\interfaces">
+      <UniqueIdentifier>{acf46bbc-f4d2-4660-8d5f-fd42ff6b263e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\hooks">
+      <UniqueIdentifier>{1056f6dd-4628-49c7-ab2c-cbfa72771565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\hooks\functions">
+      <UniqueIdentifier>{f021f058-fedd-4a2c-8fd5-1c3207453604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\entities">
+      <UniqueIdentifier>{8c82eb3c-9523-4f7e-b387-7e89149ad3dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\entities\animations">
+      <UniqueIdentifier>{1b9a2fbd-810c-4e12-abd8-8483ec09f24f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\menu">
+      <UniqueIdentifier>{c48b0183-ecb8-45df-a5b2-97263b4baed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\controls">
+      <UniqueIdentifier>{3b6e91fd-a1fa-4612-bdaa-99bed3b31c73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\features">
+      <UniqueIdentifier>{a6932b7e-8da1-4c97-9a3c-3754f00f4648}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\features\aimbot">
+      <UniqueIdentifier>{1fb110c7-4979-41ea-9701-06425ec62d93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\features\misc">
+      <UniqueIdentifier>{b8afba58-bc5a-4b46-ac31-b0d5383c8744}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\features\visuals">
+      <UniqueIdentifier>{690b7e5c-4b33-46b0-84d2-9147f1cc58e6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="entities\animations\animations.cpp">
+      <Filter>source\entities\animations</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\hooks.cpp">
+      <Filter>source\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\CreateMove.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\DrawModelExecute.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\GetViewModelFOV.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\ListLeavesInBox.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\SetupBones.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="interfaces\interfaces.cpp">
+      <Filter>source\interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="netvar_manager\netvar_manager.cpp">
+      <Filter>source\netvar_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render\render.cpp">
+      <Filter>source\render</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\utilities.cpp">
+      <Filter>source\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="vmt\vmt.cpp">
+      <Filter>source\vmt</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\LockCursor.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="math\math.cpp">
+      <Filter>source\math</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\FrameStageNotify.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="controls\controls.cpp">
+      <Filter>source\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\SceneEnd.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="lodepng-master\lodepng.cpp" />
+    <ClCompile Include="render\textures.cpp">
+      <Filter>source\render</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\DoPostScreenEffects.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\Paint.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\OverrideView.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="entities\entity.cpp" />
+    <ClCompile Include="menu\config.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\menu.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\WriteUserCmdBuffer.cpp" />
+    <ClCompile Include="menu\Menu Controls.cpp" />
+    <ClCompile Include="menu\Menu Controls.cpp" />
+    <ClCompile Include="features\Source\Anti-aim.cpp">
+      <Filter>source\features\aimbot</Filter>
+    </ClCompile>
+    <ClCompile Include="features\Source\Engine Prediction.cpp" />
+    <ClCompile Include="features\Source\Autowall.cpp">
+      <Filter>source\features\aimbot</Filter>
+    </ClCompile>
+    <ClCompile Include="features\Source\Events.cpp" />
+    <ClCompile Include="features\Source\Lagcomp.cpp" />
+    <ClCompile Include="features\Source\Legitbot.cpp" />
+    <ClCompile Include="features\Source\Misc.cpp">
+      <Filter>source\features\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="features\Source\Ragebot.cpp">
+      <Filter>source\features\aimbot</Filter>
+    </ClCompile>
+    <ClCompile Include="features\Source\Resolver.cpp">
+      <Filter>source\features\aimbot</Filter>
+    </ClCompile>
+    <ClCompile Include="features\Source\Skins.cpp" />
+    <ClCompile Include="features\Source\Visuals.cpp">
+      <Filter>source\features\visuals</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\functions\GetScreenAspect.cpp">
+      <Filter>source\hooks\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="features\Source\CustomCodeAPI.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="entities\animations\animations.h">
+      <Filter>source\entities\animations</Filter>
+    </ClInclude>
+    <ClInclude Include="interfaces\interfaces.h">
+      <Filter>source\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="math\matrix.h">
+      <Filter>source\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vector3d.h">
+      <Filter>source\math</Filter>
+    </ClInclude>
+    <ClInclude Include="netvar_manager\netvar_manager.h">
+      <Filter>source\netvar_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render\render.h">
+      <Filter>source\render</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\CBaseHandle.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\CGlobalVarsBase.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\ClientClass.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\CMoveData.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\CUserCmd.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IBaseClientDLL.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IClientEntityList.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IClientMode.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IClientNetworkable.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IClientRenderable.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IClientUnknown.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IGameMovement.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IHandleEntity.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IMaterial.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IMaterialSystem.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IMaterialVar.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IMDLCache.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IMoveHelper.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IPrediction.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\ISurface.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IVDebugOverlay.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IVEngineClient.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IVModelInfo.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IVModelRender.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IWeaponSystem.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\UtlVector.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\utilities.h">
+      <Filter>source\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="vmt\vmt.h">
+      <Filter>source\vmt</Filter>
+    </ClInclude>
+    <ClInclude Include="common_includes.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IVEngineVGui.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="entities\entity.h">
+      <Filter>source\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="math\qangle.h">
+      <Filter>source\math</Filter>
+    </ClInclude>
+    <ClInclude Include="fnv.hpp">
+      <Filter>source\netvar_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="IInputSystem.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="IPhysics.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="IEngineTrace.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="math\math.h">
+      <Filter>source\math</Filter>
+    </ClInclude>
+    <ClInclude Include="controls\controls.h">
+      <Filter>source\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="key_values.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="lodepng.h" />
+    <ClInclude Include="render\textures.h">
+      <Filter>source\render</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IGameEvent.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="icomoon.h" />
+    <ClInclude Include="weaponicons_[unknowncheats.me]_.h" />
+    <ClInclude Include="Sequence #1(4).h" />
+    <ClInclude Include="IVRenderBeams.h">
+      <Filter>source\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="hooks\hooks.h">
+      <Filter>source\hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\config.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\menu.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IMemoryAllocation.h" />
+    <ClInclude Include="sdk\CInput.h" />
+    <ClInclude Include="sdk\IClientState.h" />
+    <ClInclude Include="sdk\RecV.h" />
+    <ClInclude Include="sdk\a.h" />
+    <ClInclude Include="features\Headers\Anti-aim.h">
+      <Filter>source\features\aimbot</Filter>
+    </ClInclude>
+    <ClInclude Include="features\Headers\Autowall.h">
+      <Filter>source\features\aimbot</Filter>
+    </ClInclude>
+    <ClInclude Include="features\Headers\Engine Prediction.h" />
+    <ClInclude Include="features\Headers\Events.h" />
+    <ClInclude Include="features\Headers\Lagcomp.h" />
+    <ClInclude Include="features\Headers\Legitbot.h" />
+    <ClInclude Include="features\Headers\Misc.h">
+      <Filter>source\features\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="features\Headers\Ragebot.h">
+      <Filter>source\features\aimbot</Filter>
+    </ClInclude>
+    <ClInclude Include="features\Headers\Resolver.h">
+      <Filter>source\features\aimbot</Filter>
+    </ClInclude>
+    <ClInclude Include="features\Headers\skins.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="features\Headers\Visuals.h">
+      <Filter>source\features\visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="features\Headers\CustomCodeAPI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="fuck.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\rsz_2st6_soldier.png" />
+    <Image Include="..\..\rsz_rsz_2st6_soldier.png" />
+    <Image Include="..\..\rsz_1rsz_rsz_2st6_soldier.png" />
+    <Image Include="..\..\_300.png" />
+    <Image Include="..\..\rsz_how-to-color-a-png-in-illustrator-2.png" />
+    <Image Include="..\..\rsz_color-gradient-png-15.png" />
+    <Image Include="..\..\rsz_f4xkdtw.png" />
+    <Image Include="..\..\rsz_128474478-a-cartoon-penis-with-attitude-wearing-sunglasses-and-giving-a-thumbs-up.png" />
+    <Image Include="..\..\rsz_a.png" />
+    <Image Include="..\penis_10_human_max_fbx_obj_stl_png_3d_model_c4d_max_obj_fbx_ma_lwo_3ds_3dm_stl_2487102_o.png" />
+    <Image Include="solider.png" />
+    <Image Include="rsz_f4xkdtw.png" />
+    <Image Include="rsz_128474478-a-cartoon-penis-with-attitude-wearing-sunglasses-and-giving-a-thumbs-up.png" />
+    <Image Include="rsz_a.png" />
+    <Image Include="chicon.png" />
+    <Image Include="..\..\..\..\..\pictures\solider.png" />
+    <Image Include="..\..\..\..\..\pictures\rsz_f4xkdtw.png" />
+    <Image Include="..\..\..\..\..\pictures\rsz_128474478-a-cartoon-penis-with-attitude-wearing-sunglasses-and-giving-a-thumbs-up.png" />
+    <Image Include="..\..\..\..\..\pictures\rsz_a.png" />
+    <Image Include="..\..\..\..\..\pictures\penis_10_human_max_fbx_obj_stl_png_3d_model_c4d_max_obj_fbx_ma_lwo_3ds_3dm_stl_2487102_o.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sounds1.bin" />
+    <None Include="sounds2.bin" />
+    <None Include="font1.bin" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="undefeated.ttf" />
+  </ItemGroup>
+</Project>

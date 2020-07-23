@@ -1,0 +1,55 @@
+	void draw_angle_lines( ) {
+		if ( !Global::Local )
+			return;
+
+		Vector3D src3D, dst3D, forward, src, dst;
+		C_Trace tr;
+		C_Ray ray;
+		CTraceFilter filter;
+
+		filter.pSkip1 = Global::Local;
+		Math.AngleVectors( Vector3D( 0, Global::Local->lower_body_yaw( ), 0 ), &forward );
+		src3D = Global::Local->get_absolute_origin( );
+		dst3D = src3D + ( forward * 20.f );
+
+		ray.Init( src3D, dst3D );
+
+		Interfaces::Trace->TraceRay( ray, 0, &filter, &tr );
+
+		if ( !Interfaces::DebugOverlay->WorldToScreen( src3D, src ) || !Interfaces::DebugOverlay->WorldToScreen( tr.end, dst ) )
+			return;
+
+		Render::line( src.x, src.y, dst.x, dst.y, color( 255, 0, 0 ) );
+		Render::line( src.x + 1, src.y + 1, dst.x + 1, dst.y + 1, color( 255, 0, 0 ) );
+		Render::Text( Render::Fonts::visuals, "lby", dst.x + 4, dst.y + 4, false, 255, 255, 255 );
+
+		Math.AngleVectors( Vector3D( 0, Global::real_angle.y, 0 ), &forward );
+		dst3D = src3D + ( forward * 20.f );
+
+		ray.Init( src3D, dst3D );
+
+		Interfaces::Trace->TraceRay( ray, 0, &filter, &tr );
+
+		if ( !Interfaces::DebugOverlay->WorldToScreen( src3D, src ) || !Interfaces::DebugOverlay->WorldToScreen( tr.end, dst ) )
+			return;
+
+		Render::line( src.x, src.y, dst.x, dst.y, color( 255, 255, 255 ) );
+		Render::line( src.x + 1, src.y + 1, dst.x + 1, dst.y + 1, color( 255, 255, 255 ) );
+		Render::Text( Render::Fonts::visuals, "real", dst.x + 4, dst.y + 4, false, 255, 255, 255 );
+
+		if ( Controls.desync_display[ 0 ]) {
+			Math.AngleVectors( Vector3D( 0, Global::cmd->viewangles.y - Global::fake_angle.y, 0 ), &forward );
+			dst3D = src3D + ( forward * 20.f );
+
+			ray.Init( src3D, dst3D );
+
+			Interfaces::Trace->TraceRay( ray, 0, &filter, &tr );
+
+			if ( !Interfaces::DebugOverlay->WorldToScreen( src3D, src ) || !Interfaces::DebugOverlay->WorldToScreen( tr.end, dst ) )
+				return;
+
+			Render::line( src.x, src.y, dst.x, dst.y, color( 255, 255, 0 ) );
+			Render::line( src.x + 1, src.y + 1, dst.x + 1, dst.y + 1, color( 255, 255, 0 ) );
+			Render::Text( Render::Fonts::visuals, "fake", dst.x + 4, dst.y + 4, false, 255, 255, 255 );
+		}
+	}

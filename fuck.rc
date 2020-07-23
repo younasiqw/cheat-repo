@@ -1,0 +1,86 @@
+// Microsoft Visual C++ generated resource script.
+//
+#pragma code_page(65001)
+
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TextINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TextINCLUDE
+//
+
+1 TextINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TextINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TextINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_PNG1                PNG                     "C:\\pictures\\solider.png"
+
+IDB_PNG2                PNG                     "C:\\pictures\\rsz_f4xkdtw.png"
+
+IDB_PNG3                PNG                     "C:\\pictures\\rsz_128474478-a-cartoon-penis-with-attitude-wearing-sunglasses-and-giving-a-thumbs-up.png"
+
+IDB_PNG4                PNG                     "C:\\pictures\\rsz_a.png"
+
+IDB_PNG5                PNG                     "C:\\pictures\\penis_10_human_max_fbx_obj_stl_png_3d_model_c4d_max_obj_fbx_ma_lwo_3ds_3dm_stl_2487102_o.png"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Font
+//
+
+IDR_FONT2               FONT                    "C:\\Windows\\undefeated.ttf"
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TextINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

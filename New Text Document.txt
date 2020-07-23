@@ -1,0 +1,776 @@
+#include "menu.h"
+#include "render/textures.h"
+int selected_item = 0;
+int mheight = 285;
+int addy = 32;
+int addx = 223;
+
+void cmenu::add_checkbox(std::string name, bool* control, int tab, bool keybind, int* ckey) {
+
+	if (selected_tab == tab) {
+
+		int add2 = 0;
+		if (add == 1) add2 = 15; else if (add == 2) add2 = -15;
+
+		int check_rect[4] = { itemname_x + add2, position_y + 3, 12, 12 };
+		static bool pressed = false;
+		if (!GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(check_rect[0], check_rect[1], check_rect[2], check_rect[3])) {
+			if (pressed)
+				*control = !*control;
+			pressed = false;
+		}
+		if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(check_rect[0], check_rect[1], check_rect[2], check_rect[3]) && !pressed) pressed = true;
+
+
+		n_render::text(n_render::n_font::menu, name, itemname_x + add2 + 21, position_y + 1, false, 205, 205, 205, 255);
+
+		n_render::filled_rect(check_rect[0], check_rect[1], check_rect[2], check_rect[3], color(43, 43, 43));
+
+		if (mouse_in_region(check_rect[0], check_rect[1], check_rect[2], check_rect[3])) {
+			n_render::filled_rect(check_rect[0], check_rect[1], check_rect[2], check_rect[3], color(50, 50, 50));
+		}
+
+		if (*control)
+			n_render::filled_rect(check_rect[0] + 1, check_rect[1] + 1, check_rect[2] - 2, check_rect[3] - 2, color(controls.menu_color.r, controls.menu_color.g, controls.menu_color.b));
+
+		if (keybind) {
+
+			static bool getting_key = false;
+			static int key = 0;
+			static bool valid_name = false;
+			std::copy(keys, keys + 255, oldKeys);
+			for (int x = 0; x < 255; x++) {
+				keys[x] = (GetAsyncKeyState(x));
+			}
+
+			char buf[128];
+			const char* key_name = "[None]";
+			if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(itemname_x + 115, position_y + 1, 130, 20)) {
+				if (!getting_key) {
+					getting_key = true;
+				}
+			}
+
+			if (getting_key) {
+				for (int i = 0; i < 255; i++) {
+					if (get_key_press(i)) {
+						if (i == VK_ESCAPE) {
+							key = -1;
+							*ckey = key;
+							getting_key = false;
+							return;
+						}
+
+						key = i;
+						*ckey = key;
+						getting_key = false;
+						return;
+					}
+				}
+			}
+
+			if (getting_key) {
+				key_name = "[---]";
+			}
+			else {
+				if (*ckey >= 0) {
+					key_name = KeyStringsStick[*ckey];
+					if (key_name) {
+						valid_name = true;
+					}
+					else {
+						if (GetKeyNameText(*ckey << 16, buf, 127)) {
+							key_name = buf;
+							valid_name = true;
+						}
+					}
+				}
+				if (!valid_name) {
+					key_name = "[None]";
+				}
+			}
+
+			if (manually_set_key) {
+				key = *ckey;
+				manually_set_key = false;
+			}
+			std::string str = key_name;
+			std::wstring converted_text = std::wstring(str.begin(), str.end());
+
+			int width, height;
+			n_interfaces::surface->get_text_size(n_render::n_font::tab, converted_text.c_str(), width, height);
+
+			n_render::text(n_render::n_font::menu, key_name, itemname_x + 115 - (width / 6), position_y + 1, false, 210, 210, 210);
+		}
+		//n_render::outlined_rect(check_rect[0], check_rect[1], check_rect[2], check_rect[3], color(0, 0, 0));
+		position_y += 18;
+	}
+	control_names.push_back(name);
+}
+void cmenu::add_button(std::string name, bool* control, int tab) {
+
+	if (selected_tab == tab) {
+
+	}
+}
+void cmenu::add_listbox(int* control, int tab, std::vector<std::string> items) {
+
+	if (selected_tab == tab) {
+
+		n_render::filled_rect(itemname_x, position_y + 3, 125, items.size() * 20 + 3, color(43, 43, 43));
+		//n_render::outlined_rect(itemname_x, position_y + 3, 95, items.size() * 18 + 3, color(0, 0, 0));
+
+		for (int i = 0; i < items.size(); i++) {
+			int item_rect[4] = { itemname_x, position_y + 3 + (i * 20), 125, 17 };
+
+
+			if (GetKeyState(VK_LBUTTON) & 0x8000 && mouse_in_region(item_rect[0], item_rect[1], item_rect[2], item_rect[3]))
+				selected_cfg = i;
+
+			if (i != items.size() - 1)
+				n_render::filled_rect(item_rect[0] + 5, item_rect[1] + 20, item_rect[2] - 10, 1, color(0, 0, 0, 100));
+
+			if (selected_cfg == i) {
+				n_render::text(n_render::n_font::menu, items[i], item_rect[0] + 9, item_rect[1] + 2, false, controls.menu_color.r, controls.menu_color.g, controls.menu_color.b, 200);
+			}
+			else {
+				n_render::text(n_render::n_font::menu, items[i], item_rect[0] + 9, item_rect[1] + 2, false, 205, 205, 205);
+			}
+			*control = selected_cfg;
+		}
+
+		position_y += 10 + items.size() * 20;
+	}
+	//control_names.push_back(name);
+}
+void cmenu::add_combobox(std::string name, std::vector<std::string> items, int* control, int tab) {
+	if (selected_tab == tab) {
+		if (position_y < menu_y + gbheight + 50) {
+
+			n_render::filled_rect(itemname_x + 21, position_y + 17, 125, 16, color(43, 43, 43));
+
+			if (mouse_in_region(itemname_x + 21, position_y + 17, 125, 16)) {
+				n_render::filled_rect(itemname_x + 21, position_y + 17, 125, 16, color(50, 50, 50));
+			}
+
+			//n_render::outlined_rect(itemname_x + 21, position_y + 17, 125, 16, color(0, 0, 0)); // outline box
+			n_render::text(n_render::n_font::menu, name, itemname_x + 21, position_y, false, 205, 205, 205, 255);
+
+
+			bool pressed = false;
+			bool open = false;
+			static bool selected_open = false;
+			static bool click_rest;
+			static bool rest;
+			static std::string name_selected;
+
+			if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(itemname_x + 21, position_y + 17, 125, 15) && !click_rest)
+			{
+				name_selected = name;
+				pressed = true;
+				click_rest = true;
+			}
+			else if (!GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(itemname_x + 21, position_y + 17, 125, 15))
+				click_rest = false;
+
+			if (pressed) {
+				if (!rest)
+					selected_open = !selected_open;
+				rest = true;
+			}
+			else
+				rest = false;
+
+			if (name_selected == name)
+				open = selected_open;
+
+			for (int i = 0; i < items.size(); i++) {
+				int item_rect[4] = { itemname_x + 21, position_y + 36 + (i * 17), 125, 17 };
+
+				n_render::text(n_render::n_font::menu, items[(*control)], item_rect[0] + 4, position_y + 18, false, 205, 205, 205, 255);
+
+				if (open) {
+					if (GetKeyState(VK_LBUTTON) & 0x8000 && mouse_in_region(item_rect[0], item_rect[1], item_rect[2], item_rect[3]))
+						(*control) = i;
+
+					n_render::filled_rect(item_rect[0], item_rect[1], item_rect[2], item_rect[3], color(43, 43, 43)); //background
+					if ((*control) == i) {
+						n_render::text(n_render::n_font::menu, items[i], item_rect[0] + 4, item_rect[1] + 2, false, controls.menu_color.r, controls.menu_color.g, controls.menu_color.b, 200);
+					}
+					else {
+						n_render::text(n_render::n_font::menu, items[i], item_rect[0] + 4, item_rect[1] + 2, false, 205, 205, 205);
+					}
+				}
+			}
+
+
+			if (open) {
+				//n_render::outlined_rect(itemname_x + 21, position_y + 34, 125, items.size() * 17, color(0, 0, 0)); // outline box
+				position_y += 38 + items.size() * 18;
+			}
+			else
+				position_y += 40;
+		}
+	}
+	control_names.push_back(name);
+}
+
+int number = 0;
+void cmenu::add_slider(std::string name, int max, int add, int* control, int tab) {
+	if (selected_tab == tab) {
+		/*if (position_y > menu_y + mheight) {
+			itemname_x = menu_x + addx;
+			position_y = menu_y + addy;
+			started_new = true;
+		}*/
+
+		float item_rect[4] = { itemname_x + 21, position_y + 17, 125, 10 };
+
+		n_render::filled_rect(item_rect[0], item_rect[1], item_rect[2], item_rect[3], color(43, 43, 43));
+		//n_render::outlined_rect(item_rect[0], item_rect[1], item_rect[2], item_rect[3], color(0, 0, 0)); // outline box
+
+		if (mouse_in_region(item_rect[0], item_rect[1], item_rect[2], item_rect[3])) {
+			n_render::filled_rect(item_rect[0], item_rect[1], item_rect[2], item_rect[3], color(50, 50, 50));
+
+		}
+
+		float pixelValue = max / 123.f;
+		if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(itemname_x + 21, position_y + 17, 125, 10))
+			*control = (get_mouse_position().x - (itemname_x + 21)) * pixelValue;
+
+		if (*control > max)
+			*control = max;
+
+		if (*control < 0.f)
+			*control = 0.f;
+
+		n_render::text(n_render::n_font::menu, name, itemname_x + 21, position_y, false, 205, 205, 205, 255);
+		n_render::filled_rect(item_rect[0] + 1, item_rect[1] + 1, (*control / pixelValue), 8, color(controls.menu_color.r, controls.menu_color.g, controls.menu_color.b));
+
+		if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(item_rect[0], item_rect[1], item_rect[2], item_rect[3]))
+		{
+			n_render::text(n_render::n_font::slider, std::to_string(*control), item_rect[0]  - 3 + (*control / pixelValue), item_rect[1] - 1, false, 205, 205, 205);
+		}
+		position_y += 34;
+	}
+	control_names.push_back(name);
+}
+void cmenu::register_groupbox(std::string name, int x, int y, int tab, type TYPE) {
+	if (selected_tab == tab) {
+
+		itemname_x = x + 18;
+		position_y = y + 35;
+
+		switch (TYPE) {
+		case type::GB_FULL: gbheight = mheight - 140; break;
+		case type::GB_HALF: gbheight = (mheight - 168) / 2; break;
+		}
+
+		n_render::filled_rect(x, y, gbwidth, gbheight, color(55, 55, 55));
+
+		n_render::filled_rect(x - 8, y - 5, gbwidth + 15, 28, color(controls.menu_color.r, controls.menu_color.g, controls.menu_color.b));
+		n_render::text(n_render::n_font::tab, name, x + 93, y, true, 205, 205, 205);
+
+		n_render::filled_rect(x, y + 23, gbwidth, 5, color(0, 0, 0, 80)); // shadow
+	}
+}
+void cmenu::add_tab(std::string name) {
+
+	std::wstring converted_text = std::wstring(name.begin(), name.end());
+
+	int width, height;
+	n_interfaces::surface->get_text_size(n_render::n_font::tab, converted_text.c_str(), width, height);
+
+
+	int tab_rect[4] = { menu_x + 270 + (tab_index * 66) + 7 - (width / 3), menu_y + 20, 62, 20 };
+
+	if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(tab_rect[0], tab_rect[1], tab_rect[2], tab_rect[3]))
+		selected_tab = tab_index;
+
+	if (mouse_in_region(tab_rect[0], tab_rect[1], tab_rect[2], tab_rect[3]))
+		n_render::text(n_render::n_font::tab, name, tab_rect[0] + 9, tab_rect[1] + 2, false, 240, 240, 240, 255);
+
+	if (selected_tab == tab_index) {
+		n_render::text(n_render::n_font::tab, name, tab_rect[0] + 9, tab_rect[1] + 2, false, 240, 240, 240, 255);
+		n_render::filled_rect(tab_rect[0] + 13, tab_rect[1] + 22, width - 8, 2, color(controls.menu_color.r, controls.menu_color.g, controls.menu_color.b));
+	}
+	else
+		n_render::text(n_render::n_font::tab, name, tab_rect[0] + 9, tab_rect[1] + 2, false, 205, 205, 205, 255);
+
+	tab_index++;
+}
+
+void cmenu::add_colorpicker(std::string name, color2& item, int tab, int y, bool dalpha) {
+	if (selected_tab == tab) {
+
+		int yoffset = position_y + 10 + y;
+		int xoffset = itemname_x + 330;
+
+		color rainbow = { 0, 0, 0 };
+
+		bool pressed = false;
+		bool open = false;
+		static bool selectedOpened = false;
+		static bool clickRest;
+		static bool rest;
+		static std::string name_selected;
+
+		bool pressed1 = false;
+		bool open1 = false;
+		static bool selectedOpened1 = false;
+		static bool clickRest1;
+		static bool rest1;
+		static std::string name_selected1;
+
+		if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(itemname_x + 130, position_y - 15 + y, 16, 10) && !clickRest) {
+			name_selected = name;
+			pressed = true;
+			clickRest = true;
+		}
+		else if (!GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(itemname_x + 130, position_y - 15 + y, 16, 10))
+			clickRest = false;
+
+		if (pressed) {
+			if (!rest)
+				selectedOpened = !selectedOpened;
+			rest = true;
+		}
+		else
+			rest = false;
+
+		if (name_selected == name)
+			open = selectedOpened;
+		else
+			open = false;
+
+		if (open) {
+			if (dalpha)
+				n_render::filled_rect(xoffset - 173, yoffset - 24, 144, 128, color(40, 40, 40)); //background
+			else
+				n_render::filled_rect(xoffset - 173, yoffset - 24, 121, 128, color(40, 40, 40)); //background
+
+			ctextures rainbow = ctextures(102, 115, 115);
+			create_texture(rainbow);
+
+			n_interfaces::surface->draw_textured_rect(xoffset - 170, yoffset - 21, 115, 112);
+
+			static vector2d_t color_pos = vector2d_t(xoffset - 170, yoffset - 19);
+
+
+			POINT p;
+			COLORREF col;
+			HDC hDC;
+			BOOL b;
+
+			// Get the device context for the screen
+			hDC = GetDC(NULL);
+			b = GetCursorPos(&p);
+			col = GetPixel(hDC, p.x, p.y);
+			ReleaseDC(GetDesktopWindow(), hDC);
+
+			if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(xoffset - 170, yoffset - 21, 115, 112)) {
+				item.r = GetRValue(col);
+				item.g = GetGValue(col);
+				item.b = GetBValue(col);
+			}
+
+			if (dalpha) {
+				n_render::faded_rect(xoffset - 53, yoffset - 21, 20, 112, color(255, 255, 255), color(0, 0, 0), false); //alpha bar
+				static vector2d_t alpha_pos = vector2d_t(xoffset - 53, position_y - 10);
+				if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(xoffset - 53, yoffset - 21, 20, 110))
+				{
+					item.a = GetRValue(col);
+					alpha_pos = get_mouse_position();
+				}
+			}
+			else
+				item.a = 255;
+
+			n_render::text(n_render::n_font::slider, "RGBA: " + std::to_string(item.r) + ", " + std::to_string(item.g) + ", " + std::to_string(item.b) + ", " + std::to_string(item.a), xoffset - 169, yoffset + 92, false, 205, 205, 205);
+			if (color_pos.x > xoffset - 170 + 115)
+				color_pos.x = xoffset - 170 + 115;
+			selectedOpened1 = false;
+		}
+
+		rainbow.r = item.r;
+		rainbow.g = item.g;
+		rainbow.b = item.b; 
+		rainbow.a = 255;
+
+
+		if (GetAsyncKeyState(VK_RBUTTON) && mouse_in_region(itemname_x + 130, position_y - 15 + y, 16, 10) && !clickRest1) {
+			name_selected1 = name;
+			pressed1 = true;
+			clickRest1 = true;
+		}
+		else if (!GetAsyncKeyState(VK_RBUTTON) && mouse_in_region(itemname_x + 130, position_y - 15 + y, 16, 10))
+			clickRest1 = false;
+
+		if (pressed1) {
+			if (!rest1)
+				selectedOpened1 = !selectedOpened1;
+			rest1 = true;
+		}
+		else
+			rest1 = false;
+
+		if (name_selected1 == name)
+			open1 = selectedOpened1;
+		else
+			open1 = false;
+
+		if (open1) {
+			n_render::filled_rect(itemname_x + 150, position_y - 15 + y, 40, 32, color(40, 40, 40)); //c+p background
+			n_render::text(n_render::n_font::menu, "Copy", itemname_x + 157, position_y - 14 + y, false, 205, 205, 205);
+			n_render::text(n_render::n_font::menu, "Paste", itemname_x + 157, position_y + y, false, 205, 205, 205);
+
+			static bool pressedc = false;
+			if (!GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(itemname_x + 157, position_y - 14 + y, 35, 20)) {
+				if (pressedc)
+					stored_color = item;
+				pressedc = false;
+			}
+			if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(itemname_x + 157, position_y - 14 + y, 35, 20) && !pressedc) pressedc = true;
+
+			static bool pressedp = false;
+			if (!GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(itemname_x + 157, position_y + y, 35, 20)) {
+				if (pressedp)
+					item = stored_color;
+				pressedp = false;
+			}
+			if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(itemname_x + 157, position_y + y, 35, 20) && !pressedp) pressedp = true;
+
+
+			selectedOpened = false;
+		}
+		n_render::text(n_render::n_font::slider, std::to_string(stored_color.r) + ", " + std::to_string(stored_color.g) + ", " + std::to_string(stored_color.b) + ", " + std::to_string(stored_color.a), 0, 0, false, 205, 205, 205);
+
+		n_render::filled_rect(itemname_x + 130, position_y - 15 + y, 16, 10, rainbow); //the preivew box
+	}
+}
+void cmenu::draw_search_box() {
+	for (int i = 0; i < menu.control_names.size(); i++) {
+		std::size_t found = menu.control_names.at(i).find(menu.control_names.at(i));
+		if (found != std::string::npos)
+			std::cout << "first 'needle' found at: " << found << '\n';
+	}
+}
+static int selected_player = 0;
+void cmenu::draw_playerlist() {
+	static int width = 200, height = 250;
+
+	static int drag_x = 300;
+	static int drag_y = 300;
+	static int screen_width, screen_height;
+	bool click = false;
+	static bool dragging = false;
+
+	if (GetAsyncKeyState(VK_LBUTTON))
+		click = true;
+
+	n_interfaces::engine->get_screen_size(screen_width, screen_height);
+	vector2d_t mouse_pos = get_mouse_position();
+
+	if (dragging && !click)
+		dragging = false;
+
+	if (dragging && click) {
+		playerl_x = mouse_pos.x - drag_x;
+		playerl_y = mouse_pos.y - drag_y;
+	}
+
+	if (mouse_in_region(playerl_x, playerl_y, width, 20)) {
+		dragging = true;
+		drag_x = mouse_pos.x - playerl_x;
+		drag_y = mouse_pos.y - playerl_y;
+	}
+	n_render::filled_rect(playerl_x, playerl_y, width, height, color(40, 40, 40));
+	n_render::outlined_rect(playerl_x, playerl_y, width, height, color(0, 0, 0));
+
+	//inside
+	n_render::filled_rect(playerl_x + 7, playerl_y + 17, width - 14, height - 24, color(65, 65, 65));
+	n_render::outlined_rect(playerl_x + 7, playerl_y + 17, width - 14, height - 24, color(0, 0, 0));
+
+	n_render::text(n_render::n_font::title, "Playerlist", playerl_x + 8, playerl_y + 2, false, 255, 255, 255);
+
+	//List players
+	n_render::filled_rect(playerl_x + 26, playerl_y + 30, 149, 150, color(40, 40, 40));
+	n_render::outlined_rect(playerl_x + 26, playerl_y + 30, 149, 150, color(0, 0, 0));
+
+	if (n_interfaces::engine->is_connected() && n_interfaces::engine->is_in_game()) {
+		C_CSPlayer* local_player = reinterpret_cast<C_CSPlayer*>(n_interfaces::entity_list->get_client_entity(n_interfaces::engine->get_local_player()));
+		std::vector<int> player_index;
+		std::vector<std::string> players;
+
+		for (int i = 1; i <= n_interfaces::global_vars_base->max_clients; i++) {
+			C_CSPlayer* player = reinterpret_cast<C_CSPlayer*>(n_interfaces::entity_list->get_client_entity(i));
+
+			if (!player || player == local_player)
+				continue;
+
+			player_info_t info;
+			n_interfaces::engine->get_player_info(player->index(), &info);
+
+			players.push_back(info.name);
+			player_index.push_back(i);
+		}
+
+
+		int y = playerl_y + 31;
+		int x = playerl_x + 159;
+		int slider_y = playerl_y + 31;
+		static int old_pos = slider_y;
+		static bool changing_val = false;
+		int scroll_height = ((8 * 18) / (players.size() * 18)) / 150;
+
+		if (scroll_height > 108)
+			scroll_height = 108;
+
+		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && mouse_in_region(x, slider_y, 15, height)) {
+			slider_y = get_mouse_position().y - scroll_height / 2;
+			old_pos = get_mouse_position().y;
+			changing_val = true;
+		}
+		else {
+			if (!dragging)
+				slider_y = old_pos - scroll_height / 2;
+
+			changing_val = false;
+		}
+
+		if (slider_y < playerl_y + 31)
+			slider_y = playerl_y + 31;
+
+		if (slider_y > scroll_height + playerl_y + 125)
+			slider_y = scroll_height + playerl_y + 125;
+
+		for (int i = 0; i < players.size(); i++) {
+			int item_rect[4] = { playerl_x + 31, playerl_y + 30 + (i * 18) - (slider_y - playerl_y - 32), 124, 17 };
+
+			if (item_rect[1] < playerl_y + 162 && item_rect[1] > playerl_y + 25) {
+				if (GetKeyState(VK_LBUTTON) & 0x8000 && mouse_in_region(item_rect[0], item_rect[1], item_rect[2], item_rect[3]))
+					selected_player = i;
+
+				if (i != players.size() - 1)
+					n_render::filled_rect(item_rect[0] - 4, item_rect[1] + 15, item_rect[2] + 8, 1, color(20, 20, 20));
+
+				if (selected_player == i) {
+					n_render::text(n_render::n_font::menu, players[i], item_rect[0] + 45, item_rect[1], false, controls.menu_color.r, controls.menu_color.g, controls.menu_color.b, 200);
+				}
+				else {
+					n_render::text(n_render::n_font::menu, players[i], item_rect[0] + 45, item_rect[1], false, 205, 205, 205);
+				}
+
+				n_render::text(n_render::n_font::menu, "IDX: " + std::to_string(player_index[i]), item_rect[0], item_rect[1], false, 205, 205, 205);
+			}
+		}
+		n_render::filled_rect(playerl_x + 69, playerl_y + 30, 1, 149, color(20, 20, 20));
+
+		n_render::filled_rect(x, playerl_y + 31, 15, 148, color(48, 48, 48));
+		n_render::filled_rect(x, slider_y, 15, scroll_height, color(55, 55, 55));
+		n_render::filled_rect(x, playerl_y + 31, 1, 148, color(0, 0, 0));
+
+		//body aim button
+		static bool baim[64];
+		int check_rect[4] = { playerl_x + 26, playerl_y + 188,  12, 12 };
+		static bool pressed = false;
+		if (!GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(check_rect[0], check_rect[1], check_rect[2], check_rect[3])) {
+			if (pressed)
+				baim[player_index[selected_player]] = !baim[player_index[selected_player]];
+			pressed = false;
+		}
+		if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(check_rect[0], check_rect[1], check_rect[2], check_rect[3]) && !pressed) pressed = true;
+
+		n_render::text(n_render::n_font::menu, "Prioritize Body-Aim", check_rect[0] + 17, check_rect[1] - 1, false, 205, 205, 205, 255);
+
+		n_render::filled_rect(check_rect[0], check_rect[1], check_rect[2], check_rect[3], color(40, 40, 40));
+		if (baim[player_index[selected_player]]) {
+			n_render::filled_rect(check_rect[0] + 2, check_rect[1] + 2, check_rect[2] - 4, check_rect[3] - 4, color(controls.menu_color.r, controls.menu_color.g, controls.menu_color.b));
+			global::baim_index[player_index[selected_player]] = true;
+		}
+		else
+			global::baim_index[player_index[selected_player]] = false;
+
+		n_render::outlined_rect(check_rect[0], check_rect[1], check_rect[2], check_rect[3], color(0, 0, 0));
+
+
+		//whitelist button
+		static bool whitelist[64];
+		int check_rect2[4] = { playerl_x + 26, playerl_y + 205,  12, 12 };
+		static bool pressed2 = false;
+		if (!GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(check_rect2[0], check_rect2[1], check_rect2[2], check_rect2[3])) {
+			if (pressed2)
+				whitelist[player_index[selected_player]] = !whitelist[player_index[selected_player]];
+			pressed2 = false;
+		}
+		if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(check_rect2[0], check_rect2[1], check_rect2[2], check_rect2[3]) && !pressed2) pressed2 = true;
+
+		n_render::text(n_render::n_font::menu, "Whitelist Player", check_rect2[0] + 17, check_rect2[1] - 1, false, 205, 205, 205, 255);
+
+		n_render::filled_rect(check_rect2[0], check_rect2[1], check_rect2[2], check_rect2[3], color(40, 40, 40));
+		if (whitelist[player_index[selected_player]]) {
+			n_render::filled_rect(check_rect2[0] + 2, check_rect2[1] + 2, check_rect2[2] - 4, check_rect2[3] - 4, color(controls.menu_color.r, controls.menu_color.g, controls.menu_color.b));
+			global::whitelist_index[player_index[selected_player]] = true;
+		}
+		else
+			global::whitelist_index[player_index[selected_player]] = false;
+
+		n_render::outlined_rect(check_rect2[0], check_rect2[1], check_rect2[2], check_rect2[3], color(0, 0, 0));
+
+		//priority button
+		static bool prio[64];
+		int check_rect3[4] = { playerl_x + 26, playerl_y + 222,  12, 12 };
+		static bool pressed3 = false;
+		if (!GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(check_rect3[0], check_rect3[1], check_rect3[2], check_rect3[3])) {
+			if (pressed3)
+				prio[player_index[selected_player]] = !prio[player_index[selected_player]];
+			pressed3 = false;
+		}
+		if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(check_rect3[0], check_rect3[1], check_rect3[2], check_rect3[3]) && !pressed3) pressed3 = true;
+
+		n_render::text(n_render::n_font::menu, "Prioritize Player", check_rect3[0] + 17, check_rect3[1] - 1, false, 205, 205, 205, 255);
+
+		n_render::filled_rect(check_rect3[0], check_rect3[1], check_rect3[2], check_rect3[3], color(40, 40, 40));
+		if (prio[player_index[selected_player]]) {
+			n_render::filled_rect(check_rect3[0] + 2, check_rect3[1] + 2, check_rect3[2] - 4, check_rect3[3] - 4, color(controls.menu_color.r, controls.menu_color.g, controls.menu_color.b));
+			global::priority_index[player_index[selected_player]] = true;
+		}
+		else
+			global::priority_index[player_index[selected_player]] = false;
+
+		n_render::outlined_rect(check_rect3[0], check_rect3[1], check_rect3[2], check_rect3[3], color(0, 0, 0)); \
+
+	}
+	else
+		n_render::text(n_render::n_font::menu, "UNAVAILABLE", playerl_x + 59, playerl_y + 30, false, 205, 205, 205);
+
+}
+void cmenu::csgo_draw() {
+
+	if (selected_tab != TAB_MISC)
+		return;
+
+	static color color_array[] = {
+	color(255, 0, 0), color(255, 180, 0) , color(255, 255, 0),
+	color(0, 255, 0) , color(0, 0, 255) , color(255, 0, 255)
+	};
+
+	int draw_x = menu_x + 250, draw_y = menu_y + 82;
+
+
+	static int drag_x = 400;
+	static int drag_y = 300;
+	static int screen_width, screen_height;
+	bool click = false;
+	static bool dragging = false;
+
+	static int width = 320, height = 320;
+	if (GetAsyncKeyState(VK_LBUTTON))
+		click = true;
+
+	n_interfaces::engine->get_screen_size(screen_width, screen_height);
+	vector2d_t mouse_pos = get_mouse_position();
+
+	n_render::filled_rect(draw_x + 13, draw_y + 13, width - 76, height - 26, color(55, 55, 55)); //inside outline
+
+	n_render::filled_rect(draw_x + 2, draw_y + 3, 270, 28, color(controls.menu_color.r, controls.menu_color.g, controls.menu_color.b)); //clear button
+	n_render::text(n_render::n_font::tab, "Draw Menu", draw_x + 130, draw_y + 10, true, 205, 205, 205);
+
+
+	static int index = 0;
+
+	for (int i = 0; i < 6; i++) {
+		n_render::filled_rect(draw_x + (width - 50), draw_y + (i * 45) + 50, 28, 28, color_array[i]);
+
+		static bool pressed = false;
+		if (!GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(draw_x + (width - 50), draw_y + (i * 45) + 50, 28, 28)) {
+			if (pressed)
+				index = i;
+			pressed = false;
+		}
+		if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(draw_x + (width - 50), draw_y + (i * 45) + 50, 28, 28) && !pressed) pressed = true;
+
+	}
+
+	int undorect[4] = { draw_x + 67, draw_y + 317, 38, 17 };
+	n_render::filled_rect(undorect[0], undorect[1], undorect[2], undorect[3], color(60, 60, 60)); //clear button
+	n_render::text(n_render::n_font::menu, "Undo", undorect[0] + 6, undorect[1] + 1, false, 205, 205, 205);
+
+
+	int clearrect[4] = { draw_x + 14, draw_y + 317, 38, 17 };
+	n_render::filled_rect(clearrect[0], clearrect[1], clearrect[2], clearrect[3], color(60, 60, 60)); //clear button
+	n_render::text(n_render::n_font::menu, "Clear", clearrect[0] + 7, clearrect[1] + 1, false, 205, 205, 205);
+
+	n_render::outlined_rect(draw_x + (width - 50), draw_y + (index * 45) + 50, 28, 28, color(0, 0, 0)); //color box outline
+
+	static std::vector<draw_csgo> draw_vector;
+	static vector2d_t end_mouse_pos = get_mouse_position();
+	static vector2d_t start_mouse_pos = get_mouse_position();
+
+	if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(clearrect[0], clearrect[1], clearrect[2], clearrect[3])) { //clear
+		if (draw_vector.size() != 0)
+			draw_vector.clear();
+	}
+
+	if (GetAsyncKeyState(VK_LBUTTON) && mouse_in_region(undorect[0], undorect[1], undorect[2], undorect[3])) { //undo
+
+		if (draw_vector.size() > 0)
+			draw_vector.pop_back();
+	}
+
+	static bool draw = false;
+	if (mouse_in_region(draw_x + 13, draw_y + 16, width - 76, (height - 26))) {
+		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+			start_mouse_pos = get_mouse_position();
+			draw = true;
+		}
+		else {
+			end_mouse_pos = get_mouse_position();
+			start_mouse_pos = get_mouse_position();
+			draw = false;
+		}
+		if (draw)
+			draw_vector.push_back(draw_csgo(end_mouse_pos, start_mouse_pos, color_array[index]));
+		end_mouse_pos = get_mouse_position();
+
+	}
+	for (int i = 0; i < draw_vector.size(); i++) {
+
+		if (draw_vector.at(i).start.x > draw_x + width - 66 || draw_vector.at(i).start.y > draw_y + height - 20)
+			continue;
+			 
+		if (draw_vector.at(i).start.x < draw_x + 15 || draw_vector.at(i).start.y < draw_y + 30)
+			continue;
+
+		n_render::line(draw_vector.at(i).start.x, draw_vector.at(i).start.y, draw_vector.at(i).end.x, draw_vector.at(i).end.y, draw_vector.at(i).col);
+	}	
+}
+
+void cmenu::run_esp_preview() {
+
+	if (selected_tab != TAB_VISUALS)
+		return;
+
+	if (controls.box) {
+		n_render::outlined_rect(menu_x + 344, menu_y + 131, 133, 233, color(220, 220, 220));
+		n_render::outlined_rect(menu_x + 343, menu_y + 130, 135, 235, color(0, 0, 0, 100));
+	}
+
+	if (controls.name) {
+		n_render::text(n_render::n_font::preview, "Player01", menu_x + 393, menu_y + 118, false,  220, 220, 220);
+	}
+
+	if (controls.health) {
+		n_render::filled_rect(menu_x + 338, menu_y + 161, 1, 203, color(0, 255, 0));
+		n_render::outlined_rect(menu_x + 337, menu_y + 160, 3, 205, color(0, 0, 0, 100));
+		n_render::text(n_render::n_font::preview, "89", menu_x + 332, menu_y + 155, false, 220, 220, 220);
+	}
+	if (controls.weapon) {
+		n_render::text(n_render::n_font::preview, "SCAR-20", menu_x + 393, menu_y + 367, false, 220, 220, 220);
+	}
+
+	if (controls.info) {
+		n_render::text(n_render::n_font::preview, "HK", menu_x + 479, menu_y + 129, false, 220, 220, 220);
+		n_render::text(n_render::n_font::preview, "DUCK", menu_x + 479, menu_y + 143, false, 220, 220, 220);
+	}
+}
